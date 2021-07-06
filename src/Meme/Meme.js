@@ -12,7 +12,7 @@ const BtnCont = styled.div`
   display: flex;
   justify-content: space-evenly;
   align-items: center;
- & .next , & .gen{
+ & .change_btn , & .gen{
   padding: 10px;
   outline: none;
   font-weight: 700;
@@ -21,7 +21,7 @@ const BtnCont = styled.div`
   cursor: pointer;
  }
 
- & .next{
+ & .change_btn{
    background-color: black;
    color: white;
    border: 3px solid black;
@@ -51,13 +51,24 @@ export const Meme = () => {
   const [memeIndex, setMemeIndex] = useState(0);
 
 
+  const shuffleMemes = (array) => {
+    for(let i = array.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * i);
+      const temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
+    }
+  };
+
+
   useEffect(() => {
     fetch("https://api.imgflip.com/get_memes")
       .then((res) => res.json())
       .then((data) => {
-        const memes = data.data.memes;
+        const _memes = data.data.memes;
         console.log(data.data.memes);
-        setMemes(memes);
+        shuffleMemes(_memes);
+        setMemes(_memes);
       });
   }, []);
 
@@ -66,9 +77,9 @@ export const Meme = () => {
     <div>
       {memes.length ? <MemeImg alt={memes[memeIndex].name} src={memes[memeIndex].url} /> : null}
       <BtnCont>
-        <button onClick ={() => {setMemeIndex(memeIndex  -1)}} className = "next">Previous Meme</button>
+        <button onClick ={() => {setMemeIndex(memeIndex  -1)}} className = "change_btn">Previous Meme</button>
         <button className = "gen">Generate Meme</button>
-        <button onClick ={() => {setMemeIndex(memeIndex + 1)}} className = "next">Next Meme</button>
+        <button onClick ={() => {setMemeIndex(memeIndex + 1)}} className = "change_btn">Next Meme</button>
       </BtnCont>
     </div>
   );
