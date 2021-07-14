@@ -56,6 +56,7 @@ const InputField = styled.div`
   justify-content: space-evenly;
   min-height: 100px;
   & > input {
+    max-width: 200px;
     padding: 10px 20px;
     outline: none;
     font-size: 18px;
@@ -64,13 +65,11 @@ const InputField = styled.div`
   }
 `;
 
-
-
 export const Meme = () => {
   const [memes, setMemes] = useState(0);
-
   const [memeIndex, setMemeIndex] = useState(0);
   const [inputCount, setInputCount] = useState([]);
+  const [textFetch, setTextFetch] = useState();
 
   const shuffleMemes = (array) => {
     for (let i = array.length - 1; i > 0; i--) {
@@ -82,7 +81,10 @@ export const Meme = () => {
   };
 
   useEffect(() => {
-    fetch("https://api.imgflip.com/get_memes")
+    fetch("https://api.imgflip.com/get_memes", {
+      method: "GET",
+      //credentials: "include"
+    })
       .then((res) => res.json())
       .then((data) => {
         const _memes = data.data.memes;
@@ -101,19 +103,40 @@ export const Meme = () => {
       const boxCount = [];
       for (let i = 0; i < memes[memeIndex].box_count; i++) {
         boxCount.push("");
-      };
+      }
       setInputCount(boxCount);
-    };
+      setTextFetch(boxCount);
+    }
   }, [memeIndex, memes]);
 
   //{memes.length ? inputCount.map( i => <input key = {i} type ="text"/>) : null}
 
+  const saveMemeText = (e, index) => {
+    let tab = textFetch;
+    tab[index] = e.target.value;
+    setTextFetch(tab);
+    console.log(textFetch);
+  };
+
+  const generateCompleteMeme = () => {
+    console.log("działam");
+  };
+
   return (
     <App>
       <InputField>
-      {memes.length
-        ? inputCount.map((item, index) => <input key={index} type="text" />)
-        : null}
+        {memes.length
+          ? inputCount.map((item, index) => {
+              return (
+                <input
+                  onChange={(event) => saveMemeText(event, index)}
+                  placeholder={`Type your text here`}
+                  key={index}
+                  type="text"
+                />
+              );
+            })
+          : null}
       </InputField>
       {memes.length ? (
         <MemeImg alt={memes[memeIndex].name} src={memes[memeIndex].url} />
@@ -127,7 +150,9 @@ export const Meme = () => {
         >
           Previous Meme
         </button>
-        <button className="gen">Generate Meme</button>
+        <button onClick={generateCompleteMeme} className="gen">
+          Generate Meme
+        </button>
         <button
           onClick={() => {
             setMemeIndex(memeIndex + 1);
