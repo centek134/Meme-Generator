@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import styled from "styled-components";
 
 const App = styled.div`
@@ -94,9 +94,6 @@ export const Meme = () => {
       });
   }, []);
 
-  // nie działą bo próbuję zrobić map() na liczbie a nie na tablicy
-  // muszę stworzyć tablicę i dodać do niej tyle elementów ile jest w box_count
-
   useEffect(() => {
     if (memes.length) {
       console.log(memes[memeIndex]);
@@ -120,6 +117,26 @@ export const Meme = () => {
 
   const generateCompleteMeme = () => {
     console.log("działam");
+    const currentMeme = memes[memeIndex];
+    console.log("aktualny mem", currentMeme);
+    const textData = new FormData();
+    textData.append("username", "TestMe");
+    textData.append("password", "TestMepls");
+    textData.append("template_id", currentMeme.id);
+
+    textFetch.forEach((text, index) => {
+      textData.append(`boxes[${index}][text]`, text);
+    });
+    console.log(textData);
+
+    fetch("https://api.imgflip.com/caption_image", {
+      method: "POST",
+      body: textData,
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        console.log(data);
+      });
   };
 
   return (
