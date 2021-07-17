@@ -1,5 +1,6 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import {useHistory} from 'react-router-dom';
 
 const App = styled.div`
   min-width: 1200px;
@@ -66,10 +67,11 @@ const InputField = styled.div`
 `;
 
 export const Meme = () => {
-  const [memes, setMemes] = useState(0);
+  const [memes, setMemes] = useState([]);
   const [memeIndex, setMemeIndex] = useState(0);
   const [inputCount, setInputCount] = useState([]);
   const [textFetch, setTextFetch] = useState();
+  const browserHistory = useHistory();
 
   const shuffleMemes = (array) => {
     for (let i = array.length - 1; i > 0; i--) {
@@ -112,13 +114,17 @@ export const Meme = () => {
     let tab = textFetch;
     tab[index] = e.target.value;
     setTextFetch(tab);
-    console.log(textFetch);
   };
 
   const generateCompleteMeme = () => {
-    console.log("działam");
+
+    //we are checking if all inputs are filled with any value, if all inputs are with filled with at least 1 letter we can generate meme, if not we can't
+    if (textFetch.filter(word => word.length >= 1).length !== textFetch.length){
+      alert("Fill all inputs with text!");
+      return;
+    }
     const currentMeme = memes[memeIndex];
-    console.log("aktualny mem", currentMeme);
+
     const textData = new FormData();
     textData.append("username", "TestMe");
     textData.append("password", "TestMepls");
@@ -127,7 +133,6 @@ export const Meme = () => {
     textFetch.forEach((text, index) => {
       textData.append(`boxes[${index}][text]`, text);
     });
-    console.log(textData);
 
     fetch("https://api.imgflip.com/caption_image", {
       method: "POST",
@@ -136,6 +141,7 @@ export const Meme = () => {
       .then((resp) => resp.json())
       .then((data) => {
         console.log(data);
+        browserHistory.push(`/generated?url=${data.data.url}`);
       });
   };
 
@@ -161,6 +167,9 @@ export const Meme = () => {
       <BtnCont>
         <button
           onClick={() => {
+            if(memeIndex === 0){
+              return;;
+            }
             setMemeIndex(memeIndex - 1);
           }}
           className="change_btn"
@@ -172,6 +181,9 @@ export const Meme = () => {
         </button>
         <button
           onClick={() => {
+            if(memeIndex === memes.length - 1){
+              return;
+            }
             setMemeIndex(memeIndex + 1);
           }}
           className="change_btn"
