@@ -3,7 +3,7 @@ import styled from "styled-components";
 import {useHistory} from 'react-router-dom';
 
 const App = styled.div`
-  min-width: 1200px;
+  width: 100%;
   text-align: center;
 `;
 
@@ -11,6 +11,18 @@ const MemeImg = styled.img`
   width: 600px;
   height: 500px;
   box-shadow: 0px 0px 10px black;
+  @media only screen and (max-width:650px) {
+    width: 400px;
+    height: 300px;
+  }
+  @media only screen and (max-width:450px) {
+    width: 300px;
+    height: 200px;
+  }
+  @media only screen and (max-width:350px) {
+    width: 250px;
+    height: 200px;
+  }
 `;
 
 const BtnCont = styled.div`
@@ -18,6 +30,13 @@ const BtnCont = styled.div`
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+  @media only screen and (max-width:650px) {
+    flex-direction: column;
+    & button{
+      margin: 10px 0;
+      width: 200px;
+    }
+  }
   & .change_btn,
   & .gen {
     padding: 10px;
@@ -56,6 +75,9 @@ const InputField = styled.div`
   align-items: center;
   justify-content: space-evenly;
   min-height: 100px;
+  @media only screen and (max-width:850px) {
+    flex-direction: column;
+  }
   & > input {
     max-width: 200px;
     padding: 10px 20px;
@@ -63,6 +85,15 @@ const InputField = styled.div`
     font-size: 18px;
     border: 2px solid black;
     background-color: white;
+      @media only screen and (max-width:1200px) {
+      max-width: 150px;
+      padding: 5px;
+    }
+    @media only screen and (max-width:850px) {
+      max-width:250px;
+      padding: 10px 20px;
+      margin: 15px 0;
+  }
   }
 `;
 
@@ -153,7 +184,6 @@ export const Meme = () => {
               return (
                 <input
                   onChange={(event) => saveMemeText(event, index)}
-                  placeholder={`Type your text here`}
                   key={index}
                   type="text"
                 />
