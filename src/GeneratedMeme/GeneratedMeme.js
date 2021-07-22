@@ -17,8 +17,6 @@ const GeneratedMeme = () => {
   const location = useLocation();
   let trimmed = location.search.slice(location.search.indexOf("=") + 1);
   const url = new URLSearchParams(location.search).get("url");
-  console.log("trim me senpai", trimmed);
-  console.log(history);
 
   return (
     <div>

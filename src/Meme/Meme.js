@@ -121,7 +121,6 @@ export const Meme = () => {
       .then((res) => res.json())
       .then((data) => {
         const _memes = data.data.memes;
-        console.log(data.data.memes);
         shuffleMemes(_memes);
         setMemes(_memes);
       });
@@ -129,7 +128,6 @@ export const Meme = () => {
 
   useEffect(() => {
     if (memes.length) {
-      console.log(memes[memeIndex]);
       const boxCount = [];
       for (let i = 0; i < memes[memeIndex].box_count; i++) {
         boxCount.push("");
@@ -171,7 +169,6 @@ export const Meme = () => {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        console.log(data);
         browserHistory.push(`/generated?url=${data.data.url}`);
       });
   };
