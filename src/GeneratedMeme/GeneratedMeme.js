@@ -10,6 +10,49 @@ const ContainerMeme = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
+
+  & > img {
+      width: 550px;
+    }
+
+  @media only screen and (max-width: 600px){
+    & > img {
+      width: 500px;
+    }
+  }
+  @media only screen and (max-width: 550px){
+    & > img {
+      width: 400px;
+    }
+  }
+  @media only screen and (max-width: 450px){
+    & > img {
+      width: 300px;
+    }
+  }
+  @media only screen and (max-width: 350px){
+    & > img {
+      width: 250px;
+    }
+  }
+
+  & > button {
+    margin-top: 20px;
+    background-color: white;
+    padding: 10px 20px;
+    border: 3px solid black;
+    transition: 0.5s;
+    font-size: 20px;
+    font-weight: 700;
+    color: black;
+
+    &:hover{
+      border: 3px solid white;
+      background-color: black;
+      color: white;
+    }
+
+  }
 `;
 
 const GeneratedMeme = () => {
@@ -23,7 +66,7 @@ const GeneratedMeme = () => {
       {url ? (
         <ContainerMeme>
           <img src={trimmed} alt="I'ts your generated meme" />
-          <button onClick={() => history.push("/")}> go back</button>
+          <button onClick={() => history.push("/")}> Go Back</button>
         </ContainerMeme>
       ) : null}
     </div>
